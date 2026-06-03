@@ -6,6 +6,7 @@ import os
 class Settings(BaseSettings):
     # Paths
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    SCHEMA_DIR: str = os.path.join(BASE_DIR, "schemas")
     IMAGE_DPI: int = 96
     MIN_PDF_IMAGE_DIM: int = 692
     MIN_IMAGE_DIM: int = 692

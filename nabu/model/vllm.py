@@ -55,10 +55,12 @@ def generate_vllm(
         model_name = models.data[0].id
 
     def _generate(item: BatchInputItem, temperature, top_p) -> GenerationResult:
-        schema_str = item.schema
+        schema = item.schema
         kwargs = {}
         try:
-            schema_model = create_model(json.loads(schema_str))
+            if isinstance(schema, str):
+                schema = json.loads(schema)
+            schema_model = create_model(schema)
             json_schema = schema_model.model_json_schema()
             schema_dict = {
                 "name": schema_model.__name__,
@@ -75,8 +77,9 @@ def generate_vllm(
 
         prompt = item.prompt
         if not prompt:
+            schema_text = json.dumps(schema, indent=2) if isinstance(schema, dict) else str(schema)
             prompt = PROMPT_MAPPING[item.prompt_type]
-            prompt = prompt.replace("{schema}", json.dumps(item.schema))
+            prompt = prompt.replace("{schema}", schema_text)
 
         content = []
         images = [scale_to_fit(image) for image in item.images]

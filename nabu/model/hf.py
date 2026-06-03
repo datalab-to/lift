@@ -11,7 +11,6 @@ def generate_hf(
     batch: List[BatchInputItem],
     model,
     max_output_tokens=None,
-    bbox_scale: int = settings.BBOX_SCALE,
     **kwargs,
 ) -> List[GenerationResult]:
     if max_output_tokens is None:
@@ -62,8 +61,15 @@ def process_batch_element(item: BatchInputItem):
     prompt_type = item.prompt_type
 
     if not prompt:
+        schema = item.schema
+        if isinstance(schema, str):
+            try:
+                schema = json.loads(schema)
+            except Exception:
+                pass
+        schema_text = json.dumps(schema, indent=2) if isinstance(schema, dict) else str(schema)
         prompt = PROMPT_MAPPING[prompt_type]
-        prompt = prompt.replace("{schema}", json.dumps(item.schema))
+        prompt = prompt.replace("{schema}", schema_text)
 
     content = []
     images = [scale_to_fit(image) for image in item.images]

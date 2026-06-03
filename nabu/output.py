@@ -3,7 +3,7 @@ import json
 
 def load_output(output: str):
     try:
-        response = json.loads(output)
-    except Exception as e:
+        return json.loads(output)
+    except Exception:
         print(f"Failed to load output {output}")
-    return response
+        return None

@@ -23,4 +23,5 @@ class BatchInputItem:
 class BatchOutputItem:
     extraction: dict
     token_count: int
+    raw: str
     error: bool
