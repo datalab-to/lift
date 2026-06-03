@@ -1,0 +1,16 @@
+[project]
+name = "nabu"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "filetype>=1.2.0",
+    "json-schema-to-pydantic>=0.4.11",
+    "openai>=2.40.0",
+    "pillow>=12.2.0",
+    "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.1",
+    "pypdfium2>=5.9.0",
+    "python-dotenv>=1.2.2"
+]
