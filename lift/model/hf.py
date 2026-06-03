@@ -1,10 +1,10 @@
 import json
 from typing import List
 
-from nabu.model.schema import BatchInputItem, GenerationResult
-from nabu.model.util import scale_to_fit
-from nabu.prompts import PROMPT_MAPPING
-from nabu.settings import settings
+from lift.model.schema import BatchInputItem, GenerationResult
+from lift.model.util import scale_to_fit
+from lift.prompts import PROMPT_MAPPING
+from lift.settings import settings
 
 
 def generate_hf(
@@ -86,7 +86,7 @@ def load_model():
     except ImportError:
         raise ImportError(
             "HuggingFace backend requires additional dependencies. "
-            "Install with: pip install nabu-extract[hf]"
+            "Install with: pip install lift-pdf[hf]"
         )
 
     device_map = "auto"

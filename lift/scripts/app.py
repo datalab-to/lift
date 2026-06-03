@@ -7,10 +7,10 @@ import pypdfium2 as pdfium
 import streamlit as st
 from PIL import Image
 
-from nabu.model import InferenceManager
-from nabu.input import load_pdf_images
-from nabu.model.schema import BatchInputItem
-from nabu.schema_builder import (
+from lift.model import InferenceManager
+from lift.input import load_pdf_images
+from lift.model.schema import BatchInputItem
+from lift.schema_builder import (
     LEAF_TYPES,
     delete_schema,
     list_schemas,
@@ -223,13 +223,13 @@ def render_raw_tab():
         st.rerun()
 
 
-st.set_page_config(layout="wide", page_title="Nabu Extraction Demo")
+st.set_page_config(layout="wide", page_title="lift Extraction Demo")
 init_state()
 
 st.markdown("""
-# Nabu Extraction Demo
+# lift Extraction Demo
 
-This app will let you try nabu, a model for structured extraction.
+This app will let you try lift, a model for structured extraction.
 """)
 
 col1, col2 = st.columns([0.5, 0.5])

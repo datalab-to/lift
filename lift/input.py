@@ -4,7 +4,7 @@ from PIL import Image
 import pypdfium2 as pdfium
 import pypdfium2.raw as pdfium_c
 
-from nabu.settings import settings
+from lift.settings import settings
 
 
 def flatten(page, flag=pdfium_c.FLAT_NORMALDISPLAY):

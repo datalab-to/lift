@@ -5,7 +5,7 @@ import os
 import subprocess
 import sys
 
-from nabu.settings import settings
+from lift.settings import settings
 
 # H100 80GB is the baseline for scaling
 BASELINE_VRAM_GB = 80

@@ -1,10 +1,10 @@
 from typing import List
 
-from nabu.model.hf import load_model, generate_hf
-from nabu.model.schema import BatchInputItem, BatchOutputItem
-from nabu.model.vllm import generate_vllm
-from nabu.output import load_output
-from nabu.settings import settings
+from lift.model.hf import load_model, generate_hf
+from lift.model.schema import BatchInputItem, BatchOutputItem
+from lift.model.vllm import generate_vllm
+from lift.output import load_output
+from lift.settings import settings
 
 
 class InferenceManager:

@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     IMAGE_DPI: int = 96
     MIN_PDF_IMAGE_DIM: int = 692
     MIN_IMAGE_DIM: int = 692
-    MODEL_CHECKPOINT: str = "datalab-to/nabu-oss-0.1.2"
+    MODEL_CHECKPOINT: str = "datalab-to/lift-oss-0.1.2"
     TORCH_DEVICE: str | None = None
     MAX_OUTPUT_TOKENS: int = 12384
     TORCH_ATTN: str | None = None
@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     # vLLM server settings
     VLLM_API_KEY: str = "EMPTY"
     VLLM_API_BASE: str = "http://localhost:8000/v1"
-    VLLM_MODEL_NAME: str = "nabu"
+    VLLM_MODEL_NAME: str = "lift"
     VLLM_GPUS: str = "0"
     MAX_VLLM_RETRIES: int = 6
 

@@ -10,10 +10,10 @@ from PIL import Image
 from json_schema_to_pydantic import create_model
 from openai import OpenAI
 
-from nabu.model.schema import BatchInputItem, GenerationResult
-from nabu.model.util import scale_to_fit, detect_repeat_token
-from nabu.prompts import PROMPT_MAPPING
-from nabu.settings import settings
+from lift.model.schema import BatchInputItem, GenerationResult
+from lift.model.util import scale_to_fit, detect_repeat_token
+from lift.prompts import PROMPT_MAPPING
+from lift.settings import settings
 
 
 def image_to_base64(image: Image.Image) -> str:

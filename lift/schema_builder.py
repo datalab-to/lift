@@ -5,7 +5,7 @@ from typing import List
 
 from json_schema_to_pydantic import create_model
 
-from nabu.settings import settings
+from lift.settings import settings
 
 # Leaf types selectable in the builder. Objects and arrays of objects are
 # implied by dot paths (customer.name) and [] segments (items[].sku).
