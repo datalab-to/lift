@@ -20,6 +20,7 @@ classifiers = [
     "Topic :: Text Processing",
 ]
 dependencies = [
+    "click>=8.1.0",
     "filetype>=1.2.0",
     "json-schema-to-pydantic>=0.4.11",
     "openai>=2.40.0",
@@ -30,18 +31,33 @@ dependencies = [
     "python-dotenv>=1.2.2",
 ]
 
+[project.optional-dependencies]
+hf = [
+    "torch>=2.8.0",
+    "torchvision>=0.23.0",
+    "transformers>=5.2.0",
+    "accelerate>=1.11.0",
+]
+app = [
+    "pandas>=2.2.0",
+    "streamlit>=1.45.0",
+]
+all = [
+    "lift-pdf[hf,app]",
+]
+
 [project.urls]
 Homepage = "https://github.com/datalab-to/lift"
 Repository = "https://github.com/datalab-to/lift"
 Issues = "https://github.com/datalab-to/lift/issues"
 
 [project.scripts]
+lift_extract = "lift.scripts.extract_cli:main"
 lift_vllm = "lift.scripts.vllm_launcher:main"
 
 [dependency-groups]
 dev = [
-    "pandas>=2.2.0",
-    "streamlit>=1.45.0",
+    "lift-pdf[app]",
 ]
 
 [build-system]

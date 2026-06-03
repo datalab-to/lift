@@ -7,9 +7,9 @@ import pypdfium2 as pdfium
 import streamlit as st
 from PIL import Image
 
+from lift.extract import extract_images
 from lift.model import InferenceManager
 from lift.input import load_pdf_images
-from lift.model.schema import BatchInputItem
 from lift.schema_builder import (
     LEAF_TYPES,
     delete_schema,
@@ -47,20 +47,6 @@ def page_counter(pdf_file):
     doc_len = len(doc)
     doc.close()
     return doc_len
-
-
-def extract(
-    images: List[Image.Image],
-    schema: dict,
-    model=None,
-):
-    batch = BatchInputItem(
-        images=images,
-        prompt_type="direct",
-        schema=schema,
-    )
-    result = model.generate([batch])[0]
-    return result
 
 
 def init_state():
@@ -296,11 +282,7 @@ if run_extraction:
         st.stop()
 
     with st.spinner("Running extraction..."):
-        result = extract(
-            pil_images,
-            schema,
-            model,
-        )
+        result = extract_images(pil_images, schema, model)
 
     with col1:
         st.markdown("### Result")
