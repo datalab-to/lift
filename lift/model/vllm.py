@@ -23,6 +23,34 @@ def image_to_base64(image: Image.Image) -> str:
     return base64.b64encode(buffered.getvalue()).decode()
 
 
+_NULLABLE_LEAF_TYPES = ("string", "number", "integer", "boolean")
+
+
+def make_properties_nullable(node):
+    """Allow null for every property leaf in a JSON schema (in place).
+
+    Without this, schema-constrained decoding grammar-forces a typed value
+    for every field, so the model literally cannot abstain on fields absent
+    from the document — it hallucinates a value (or the string "null")
+    instead. Allowing null lifts field accuracy and roughly quadruples
+    should-be-null accuracy on the extraction benchmark, at no latency cost.
+    Object/array structure and array item types are left untouched.
+    """
+    if isinstance(node, dict):
+        props = node.get("properties")
+        if isinstance(props, dict):
+            for spec in props.values():
+                if isinstance(spec, dict):
+                    leaf_type = spec.get("type")
+                    if isinstance(leaf_type, str) and leaf_type in _NULLABLE_LEAF_TYPES:
+                        spec["type"] = [leaf_type, "null"]
+        for value in node.values():
+            make_properties_nullable(value)
+    elif isinstance(node, list):
+        for value in node:
+            make_properties_nullable(value)
+
+
 def generate_vllm(
     batch: List[BatchInputItem],
     max_output_tokens: int = None,
@@ -62,6 +90,7 @@ def generate_vllm(
                 schema = json.loads(schema)
             schema_model = create_model(schema)
             json_schema = schema_model.model_json_schema()
+            make_properties_nullable(json_schema)
             schema_dict = {
                 "name": schema_model.__name__,
                 "schema": json_schema,
