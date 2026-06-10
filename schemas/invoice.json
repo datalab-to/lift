@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "invoice_number": {
+      "type": "string",
+      "description": "Invoice identifier"
+    },
+    "invoice_date": {
+      "type": "string",
+      "description": "Date the invoice was issued"
+    },
+    "total": {
+      "type": "number",
+      "description": "Total amount due"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Line item description"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Line item amount"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "invoice_number",
+    "total"
+  ]
+}

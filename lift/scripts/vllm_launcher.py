@@ -44,7 +44,7 @@ def get_gpu_settings(gpu: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Launch vLLM server for Chandra")
+    parser = argparse.ArgumentParser(description="Launch vLLM server for lift")
     parser.add_argument(
         "--gpu",
         default="h100",
@@ -82,8 +82,11 @@ def main():
         str(max_num_seqs),
         "--dtype",
         "bfloat16",
+        # lift sends every page of a document in one request (~1k tokens/page),
+        # so the context window bounds document length. The hybrid-attention
+        # architecture keeps KV cache small, so a large window is cheap.
         "--max-model-len",
-        "32000",
+        "131072",
         "--max_num_batched_tokens",
         str(max_batched_tokens),
         "--gpu-memory-utilization",

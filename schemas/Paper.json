@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "title of paper"
+    },
+    "authors": {
+      "type": "string",
+      "description": "Each authors name"
+    },
+    "equations": {
+      "type": "string",
+      "description": "each equation, comma separated"
+    }
+  }
+}

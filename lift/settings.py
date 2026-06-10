@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     IMAGE_DPI: int = 96
     MIN_PDF_IMAGE_DIM: int = 692
     MIN_IMAGE_DIM: int = 692
-    MODEL_CHECKPOINT: str = "datalab-to/lift-oss-0.1.2"
+    MODEL_CHECKPOINT: str = "datalab-to/lift-oss-0.1.7"
     TORCH_DEVICE: str | None = None
     MAX_OUTPUT_TOKENS: int = 12384
     TORCH_ATTN: str | None = None

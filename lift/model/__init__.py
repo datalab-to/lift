@@ -38,7 +38,7 @@ class InferenceManager:
             )
 
         output = []
-        for result, input_item in zip(results, batch):
+        for result in results:
             extraction = load_output(result.raw)
             output.append(
                 BatchOutputItem(
