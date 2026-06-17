@@ -4,9 +4,10 @@ import os
 
 
 class Settings(BaseSettings):
-    # Paths
-    BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    SCHEMA_DIR: str = os.path.join(BASE_DIR, "schemas")
+    # Paths. SCHEMA_DIR lives inside the package so the bundled schemas ship
+    # with the wheel; override it (env or local.env) to point at your own library.
+    PACKAGE_DIR: str = os.path.dirname(os.path.abspath(__file__))
+    SCHEMA_DIR: str = os.path.join(PACKAGE_DIR, "schemas")
     IMAGE_DPI: int = 96
     MIN_PDF_IMAGE_DIM: int = 692
     MIN_IMAGE_DIM: int = 692
