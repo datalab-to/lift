@@ -22,6 +22,10 @@
 
 lift extracts structured JSON from PDFs and images by passing a schema. It's a 9B vision model that returns a JSON object matching your schema, with schema-constrained decoding guaranteeing valid output.
 
+<p align="center">
+  <img src="assets/accuracy.png" alt="Extraction accuracy benchmark" width="720"/>
+</p>
+
 ## Try lift on Datalab
 
 Our managed platform runs improved extraction with higher accuracy than the open weights, plus per-field verification, citations, and confidence scores — zero data retention by default, SOC 2 Type 2, and custom BAAs.
@@ -75,6 +79,10 @@ All models receive the same rendered page images, and extract each document in a
 
 \* Per document, 8 concurrent requests. Local models (lift, Qwen3.5-9B, NuExtract3) served with vLLM on a single GPU; Gemini, Datalab, and Azure via API. Latency varies with hardware and load - treat as relative, not absolute.
 ‡ Azure Content Understanding latency includes a one-time analyzer build per document (each benchmark schema is unique).
+
+<p align="center">
+  <img src="assets/latency.png" alt="Latency benchmark" width="720"/>
+</p>
 
 - **Field accuracy** — fraction of individual schema fields extracted correctly.
 - **Full-document accuracy** — fraction of documents where *every* field is correct.
