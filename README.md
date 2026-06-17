@@ -20,7 +20,7 @@
 
 # lift
 
-lift extracts structured JSON from PDFs and images by passing a schema. It's a 9B vision model — it reads page images directly (no OCR step) and returns a JSON object matching your schema, with schema-constrained decoding guaranteeing valid output.
+lift extracts structured JSON from PDFs and images by passing a schema. It's a 9B vision model that returns a JSON object matching your schema, with schema-constrained decoding guaranteeing valid output.
 
 ## Try lift on Datalab
 
@@ -28,7 +28,7 @@ Our managed platform runs improved extraction with higher accuracy than the open
 
 If you have high volume workloads, we offer a batch processing service that has processed 200M+ pages per week — we manage the infrastructure so your workloads finish on time.
 
-Get started with **$5 in free credits** — [sign up](https://www.datalab.to/?utm_source=gh-lift) — takes under 30 seconds — or try lift in our [public playground](https://www.datalab.to/playground?utm_source=gh-lift).
+Get started with **$20 in free credits per month** — [sign up](https://www.datalab.to/?utm_source=gh-lift) - takes under 30 seconds - or try lift in our [public playground](https://www.datalab.to/playground?utm_source=gh-lift).
 
 Commercial self-hosting requires a license — see [Commercial usage](#commercial-usage). For on-prem licensing, [contact us](https://www.datalab.to/contact?utm_source=gh-lift-onprem).
 
@@ -65,14 +65,16 @@ Evaluated on a 225-document extraction benchmark (6–64 pages per document, ~11
 All models receive the same rendered page images, and extract each document in a single pass.
 
 | Model | Size | Field accuracy | Full-document accuracy | Median latency* | Features |
-|---|---|---|---|---|---|
- | Datalab API | — | 94.7% | 37.3% | 33.1s | Citations + Verification |
-| Gemini Flash 3.5 | — | 91.3% | 40.0% | 28.1s | |
-| **lift** | 9B | **90.2%** | 20.9% | 9.5s | |
-| NuExtract3 | 4B | 81.5% | 8.4% | 8.3s | |
-| Qwen3.5-9B | 9B | 76.32% | 24.0% | 16.8s | |
+|---|---|----------------|------------------------|-----------------|---|
+ | Datalab API | — | 95.9%          | 44.4%                  | 30.8s           | Citations + Verification |
+| Gemini Flash 3.5 | — | 91.3%          | 40.0%                  | 28.1s           | |
+| **lift** | 9B | **90.2%**      | 20.9%                  | 9.5s            | |
+| Azure Content Understanding | — | 83.4%          | 22.2%                  | 73.7s‡          | |
+| NuExtract3 | 4B | 81.5%          | 8.4%                   | 8.3s            | |
+| Qwen3.5-9B | 9B | 76.32%         | 24.0%                  | 16.8s           | |
 
-\* Per document, 8 concurrent requests. Local models (lift, Qwen3.5-9B, NuExtract3) served with vLLM on a single GPU; Gemini via API. Latency varies with hardware and load - treat as relative, not absolute.
+\* Per document, 8 concurrent requests. Local models (lift, Qwen3.5-9B, NuExtract3) served with vLLM on a single GPU; Gemini, Datalab, and Azure via API. Latency varies with hardware and load - treat as relative, not absolute.
+‡ Azure Content Understanding latency includes a one-time analyzer build per document (each benchmark schema is unique).
 
 - **Field accuracy** — fraction of individual schema fields extracted correctly.
 - **Full-document accuracy** — fraction of documents where *every* field is correct.
@@ -179,7 +181,7 @@ if result.extraction is not None:
     data = result.extraction  # dict matching the schema
 ```
 
-Pass `model=InferenceManager(method="hf")` to load weights in-process and reuse them across calls, and `page_range="0-5"` to limit PDF pages. Set `VLLM_API_BASE` to target a remote server.
+Pass a reused model — `from lift.model import InferenceManager; model=InferenceManager(method="hf")` — to load weights in-process and reuse them across calls, and `page_range="0-5"` to limit PDF pages. Set `VLLM_API_BASE` to target a remote server.
 
 ### Schema Studio
 
