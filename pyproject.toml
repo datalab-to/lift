@@ -54,6 +54,7 @@ Issues = "https://github.com/datalab-to/lift/issues"
 [project.scripts]
 lift_extract = "lift.scripts.extract_cli:main"
 lift_vllm = "lift.scripts.vllm_launcher:main"
+lift_app = "lift.scripts.app_launcher:main"
 
 [dependency-groups]
 dev = [
