@@ -23,11 +23,8 @@
 lift extracts structured JSON from PDFs and images by passing a schema. It's a 9B vision model that returns a JSON object matching your schema, with schema-constrained decoding guaranteeing valid output.
 
 <p align="center">
-  <img src="assets/extraction-example.png" alt="lift extracting schema-aligned JSON from an invoice" width="820"/>
-</p>
-
-<p align="center">
-  <img src="assets/accuracy.png" alt="Extraction accuracy benchmark" width="720"/>
+  <img src="assets/extraction-example.png" alt="lift extracting schema-aligned JSON from an invoice" width="48%"/>
+  <img src="assets/accuracy.png" alt="Extraction accuracy benchmark" width="48%"/>
 </p>
 
 ## Try lift on Datalab
