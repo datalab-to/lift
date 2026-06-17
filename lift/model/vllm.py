@@ -28,13 +28,6 @@ _NULLABLE_LEAF_TYPES = ("string", "number", "integer", "boolean")
 
 def make_properties_nullable(node):
     """Allow null for every property leaf in a JSON schema (in place).
-
-    Without this, schema-constrained decoding grammar-forces a typed value
-    for every field, so the model literally cannot abstain on fields absent
-    from the document — it hallucinates a value (or the string "null")
-    instead. Allowing null lifts field accuracy and roughly quadruples
-    should-be-null accuracy on the extraction benchmark, at no latency cost.
-    Object/array structure and array item types are left untouched.
     """
     if isinstance(node, dict):
         props = node.get("properties")

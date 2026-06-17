@@ -27,11 +27,11 @@ python .claude/skills/datalab_api/scripts/datalab_extract.py document.pdf \
 - `--schema` accepts a `.json` file path or an inline JSON string (standard JSON Schema with a `properties` key — same authoring guidelines as the `lift_extraction` skill).
 - `--mode` picks the speed/accuracy tradeoff:
 
-| mode | what it does | when |
-|---|---|---|
-| `turbo` | image-only, fastest, cheapest | quick drafts, simple docs |
-| `fast` | OCR parse + extraction, low latency | general use |
-| `balanced` | multi-pass with **per-field verification** (default) | hard docs, when correctness matters |
+| mode | what it does                                         | when                                 |
+|---|------------------------------------------------------|--------------------------------------|
+| `turbo` | fastest, cheapest                                    | low-latency, less accuracy sensitive |
+| `fast` | full parse + extraction, low latency                 | general use                          |
+| `balanced` | multi-pass with **per-field verification** (default) | hard docs, when correctness matters  |
 
 - `--page-range 0,2-4,10` limits pages; `--timeout` defaults to 600s (long docs in balanced mode take minutes).
 - The extraction JSON goes to stdout; the request id and the **confidence score** (`extraction_score_average`, 1-5) go to stderr. Treat a score under ~4 as "review the output against the document".
