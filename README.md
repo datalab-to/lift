@@ -210,7 +210,7 @@ lift_vllm --gpu a100-80  # tune batch settings for your GPU
 
 This launches a Docker container with optimized inference settings, automatically scaling batch size to your GPU's VRAM. Supported GPUs: `h100`, `a100-80`, `a100`/`a100-40`, `l40s`, `a10`, `l4`, `4090`, `3090`, `t4`.
 
-You can also start your own vLLM server with the `datalab-to/lift-oss-0.1.7` model.
+You can also start your own vLLM server with the `datalab-to/lift-extract` model.
 
 ### Configuration
 
@@ -218,7 +218,7 @@ Settings can be configured via environment variables or a `local.env` file:
 
 ```bash
 # Model settings
-MODEL_CHECKPOINT=datalab-to/lift-oss-0.1.7
+MODEL_CHECKPOINT=datalab-to/lift-extract
 MAX_OUTPUT_TOKENS=12384
 TORCH_DEVICE=cuda:0     # pin the HF backend to a device
 
