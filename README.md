@@ -29,9 +29,9 @@ lift extracts structured JSON from PDFs and images by passing a schema. It's a 9
 
 ## Try lift on Datalab
 
-Our managed platform runs improved extraction with higher accuracy than the open weights, plus per-field verification, citations, and confidence scores — zero data retention by default, SOC 2 Type 2, and custom BAAs.
+Our managed platform runs improved extraction with higher accuracy than the open weights, plus per-field verification, citations, and confidence scores.
 
-If you have high volume workloads, we offer a batch processing service that has processed 200M+ pages per week — we manage the infrastructure so your workloads finish on time.
+If you have high volume workloads, we offer a batch processing service that has processed 1B+ pages per week.
 
 Get started with **$20 in free credits per month** — [sign up](https://www.datalab.to/?utm_source=gh-lift) - takes under 30 seconds - or try lift in our [public playground](https://www.datalab.to/playground?utm_source=gh-lift).
 
@@ -39,9 +39,8 @@ Commercial self-hosting requires a license — see [Commercial usage](#commercia
 
 ## Features
 
-- Extract structured data straight from page images — no separate OCR step
-- Pass any JSON schema; **schema-constrained decoding guarantees valid, well-typed output**
-- Nullable fields by default, so the model abstains on data that isn't in the document instead of hallucinating
+- Extract structured data from documents
+- Pass any JSON schema
 - Handles multi-page documents in a single pass, including values that span pages
 - Two inference modes: local (HuggingFace) and remote (vLLM server)
 - CLI for single files, inline schemas, or whole directories
@@ -65,7 +64,7 @@ lift_extract input.pdf ./output --schema schema.json --method hf
 
 ## Benchmarks
 
-Evaluated on a 225-document extraction benchmark (6–64 pages per document, ~11,000 scored fields) with adversarial cases planted throughout: cross-page values, exhaustive lists, fields that must be left null, near-miss distractors, multi-source aggregation. Scoring is deterministic exact-match against ground truth (numeric tolerance, normalized strings) - no LLM judging.
+Evaluated on a 225-document extraction benchmark (6–64 pages per document, ~11,000 scored fields) with adversarial cases planted throughout: cross-page values, exhaustive lists, fields that must be left null, near-miss distractors, multi-source aggregation. Scoring is deterministic exact-match against ground truth (numeric tolerance, normalized strings).
 
 All models receive the same rendered page images, and extract each document in a single pass.
 
@@ -88,7 +87,7 @@ All models receive the same rendered page images, and extract each document in a
 - **Full-document accuracy** — fraction of documents where *every* field is correct.
 - All models served with default/recommended settings from Github or Huggingface.
 
-Hosted models with verification, citations, and confidence scores are available via the [Datalab API](https://www.datalab.to) — try schemas interactively in the [playground](https://www.datalab.to/playground).
+Hosted models with verification, citations, and confidence scores are available via the [Datalab API](https://www.datalab.to) - test in the [playground](https://www.datalab.to/playground).
 
 ## Installation
 
@@ -146,7 +145,7 @@ A schema is standard JSON Schema. Keep it simple — `string`, `number`, `intege
 }
 ```
 
-Write a `description` for any field whose name isn't self-explanatory — descriptions meaningfully improve accuracy. Mark a field `required` only when it must appear; fields genuinely absent from a document come back `null`.
+Write a `description` for any field whose name isn't self-explanatory. Mark a field `required` only when it must appear; fields genuinely absent from a document come back `null`.
 
 ### CLI
 
@@ -189,7 +188,7 @@ if result.extraction is not None:
     data = result.extraction  # dict matching the schema
 ```
 
-Pass a reused model — `from lift.model import InferenceManager; model=InferenceManager(method="hf")` — to load weights in-process and reuse them across calls, and `page_range="0-5"` to limit PDF pages. Set `VLLM_API_BASE` to target a remote server.
+Pass a reused model - `from lift.model import InferenceManager; model=InferenceManager(method="hf")` - to load weights in-process and reuse them across calls, and `page_range="0-5"` to limit PDF pages. Set `VLLM_API_BASE` to target a remote server.
 
 ### Schema Studio
 
@@ -230,7 +229,7 @@ VLLM_GPUS=0
 
 # Commercial usage
 
-This code is Apache 2.0, and our model weights use a modified OpenRAIL-M license (free for research, personal use, and startups under $2M funding/revenue, cannot be used competitively with our API). To remove the OpenRAIL license requirements, or for broader commercial licensing, visit our pricing page [here](https://www.datalab.to/pricing?utm_source=gh-lift).
+This code is Apache 2.0, and our model weights use a modified OpenRAIL-M license (free for research, personal use, and startups under $5M funding/revenue, cannot be used competitively with our API). To remove the OpenRAIL license requirements, or for broader commercial licensing, visit our pricing page [here](https://www.datalab.to/pricing?utm_source=gh-lift).
 
 # Credits
 
