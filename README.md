@@ -68,14 +68,14 @@ Evaluated on a 225-document extraction benchmark (6–64 pages per document, ~11
 
 All models receive the same rendered page images, and extract each document in a single pass.
 
-| Model | Size | Field accuracy | Full-document accuracy | Median latency* | Features |
-|---|---|----------------|------------------------|-----------------|---|
+| Model | Size | Field accuracy | Full-document accuracy | Median latency* | Features                 |
+|---|---|----------------|------------------------|-----------------|--------------------------|
  | Datalab API | — | 95.9%          | 44.4%                  | 30.8s           | Citations + Verification |
-| Gemini Flash 3.5 | — | 91.3%          | 40.0%                  | 28.1s           | |
-| **lift** | 9B | **90.2%**      | 20.9%                  | 9.5s            | |
-| Azure Content Understanding | — | 83.4%          | 22.2%                  | 73.7s           | |
-| NuExtract3 | 4B | 81.5%          | 8.4%                   | 8.3s            | |
-| Qwen3.5-9B | 9B | 76.32%         | 24.0%                  | 16.8s           | |
+| Gemini Flash 3.5 | — | 91.3%          | 40.0%                  | 28.1s           |                          |
+| **lift** | 9B | **90.2%**      | 20.9%                  | 9.5s            |                          |
+| Azure Content Understanding | — | 83.4%          | 22.2%                  | 73.7s           | Citations                |
+| NuExtract3 | 4B | 81.5%          | 8.4%                   | 8.3s            |                          |
+| Qwen3.5-9B | 9B | 76.32%         | 24.0%                  | 16.8s           |                          |
 
 \* Per document, 8 concurrent requests. Local models (lift, Qwen3.5-9B, NuExtract3) served with vLLM on a single GPU; Gemini, Datalab, and Azure via API. Latency varies with hardware and load - treat as relative, not absolute.
 
