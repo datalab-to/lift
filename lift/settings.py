@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     IMAGE_DPI: int = 96
     MIN_PDF_IMAGE_DIM: int = 692
     MIN_IMAGE_DIM: int = 692
-    MODEL_CHECKPOINT: str = "datalab-to/lift-extract"
+    MODEL_CHECKPOINT: str = "datalab-to/lift"
     TORCH_DEVICE: str | None = None
     MAX_OUTPUT_TOKENS: int = 12384
     TORCH_ATTN: str | None = None
