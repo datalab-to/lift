@@ -1,6 +1,7 @@
 import base64
 import io
 import json
+import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
@@ -14,6 +15,8 @@ from lift.model.schema import BatchInputItem, GenerationResult
 from lift.model.util import scale_to_fit, detect_repeat_token
 from lift.prompts import PROMPT_MAPPING
 from lift.settings import settings
+
+logger = logging.getLogger(__name__)
 
 
 def image_to_base64(image: Image.Image) -> str:
@@ -46,8 +49,8 @@ def make_properties_nullable(node):
 
 def generate_vllm(
     batch: List[BatchInputItem],
-    max_output_tokens: int = None,
-    max_retries: int = None,
+    max_output_tokens: int | None = None,
+    max_retries: int | None = None,
     max_workers: int | None = None,
     custom_headers: dict | None = None,
     max_failure_retries: int | None = None,
@@ -59,6 +62,7 @@ def generate_vllm(
         api_key=settings.VLLM_API_KEY,
         base_url=vllm_api_base,
         default_headers=custom_headers,
+        timeout=settings.VLLM_TIMEOUT,
     )
     model_name = settings.VLLM_MODEL_NAME
 
@@ -95,7 +99,7 @@ def generate_vllm(
                 "json_schema": schema_dict,
             }
         except Exception as e:
-            print(f"Schema failed validation with error {e}, skipping guardrails...")
+            logger.warning("Schema failed to compile (%s); skipping decoding guardrails.", e)
 
         prompt = item.prompt
         if not prompt:
@@ -132,7 +136,7 @@ def generate_vllm(
                 error=False,
             )
         except Exception as e:
-            print(f"Error during VLLM generation: {e}")
+            logger.error("Error during vLLM generation: %s", e)
             return GenerationResult(raw="", token_count=0, error=True)
 
         return result
@@ -154,14 +158,16 @@ def generate_vllm(
         )
 
         if retries < max_retries and has_repeat:
-            print(
-                f"Detected repeat token, retrying generation (attempt {retries + 1})..."
+            logger.info(
+                "Detected repeat token, retrying generation (attempt %d)...",
+                retries + 1,
             )
             return True
 
         if retries < max_retries and result.error:
-            print(
-                f"Detected vllm error, retrying generation (attempt {retries + 1})..."
+            logger.info(
+                "Detected vLLM error, retrying generation (attempt %d)...",
+                retries + 1,
             )
             time.sleep(2 * (retries + 1))  # Sleeping can help under load
             return True
@@ -171,8 +177,9 @@ def generate_vllm(
             and max_failure_retries is not None
             and retries < max_failure_retries
         ):
-            print(
-                f"Detected vllm error, retrying generation (attempt {retries + 1})..."
+            logger.info(
+                "Detected vLLM error, retrying generation (attempt %d)...",
+                retries + 1,
             )
             time.sleep(2 * (retries + 1))  # Sleeping can help under load
             return True

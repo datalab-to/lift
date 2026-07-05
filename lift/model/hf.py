@@ -10,7 +10,7 @@ from lift.settings import settings
 def generate_hf(
     batch: List[BatchInputItem],
     model,
-    max_output_tokens=None,
+    max_output_tokens: int | None = None,
     **kwargs,
 ) -> List[GenerationResult]:
     if max_output_tokens is None:

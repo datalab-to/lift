@@ -1,16 +1,20 @@
+import logging
 from typing import List
+
 import filetype
-from PIL import Image
 import pypdfium2 as pdfium
 import pypdfium2.raw as pdfium_c
+from PIL import Image
 
 from lift.settings import settings
 
+logger = logging.getLogger(__name__)
 
-def flatten(page, flag=pdfium_c.FLAT_NORMALDISPLAY):
+
+def flatten(page, flag=pdfium_c.FLAT_NORMALDISPLAY) -> bool:
+    """Flatten annotations / form fields into the page. Returns True on success."""
     rc = pdfium_c.FPDFPage_Flatten(page, flag)
-    if rc == pdfium_c.FLATTEN_FAIL:
-        print(f"Failed to flatten annotations / form fields on page {page}.")
+    return rc != pdfium_c.FLATTEN_FAIL
 
 
 def load_image(
@@ -26,7 +30,7 @@ def load_image(
 
 def load_pdf_images(
     filepath: str,
-    page_range: List[int],
+    page_range: List[int] | None,
     image_dpi: int = settings.IMAGE_DPI,
     min_pdf_image_dim: int = settings.MIN_PDF_IMAGE_DIM,
 ) -> List[Image.Image]:
@@ -34,36 +38,54 @@ def load_pdf_images(
     doc.init_forms()
 
     images = []
-    for page in range(len(doc)):
-        if not page_range or page in page_range:
-            page_obj = doc[page]
+    try:
+        for page_index in range(len(doc)):
+            if page_range and page_index not in page_range:
+                continue
+
+            page_obj = doc[page_index]
             min_page_dim = min(page_obj.get_width(), page_obj.get_height())
-            scale_dpi = (min_pdf_image_dim / min_page_dim) * 72
-            scale_dpi = max(scale_dpi, image_dpi)
-            page_obj = doc[page]
-            flatten(page_obj)
-            page_obj = doc[page]
+            scale_dpi = max((min_pdf_image_dim / min_page_dim) * 72, image_dpi)
+
+            if not flatten(page_obj):
+                logger.warning(
+                    "Failed to flatten annotations / form fields on page %d.",
+                    page_index,
+                )
+
             pil_image = page_obj.render(scale=scale_dpi / 72).to_pil().convert("RGB")
             images.append(pil_image)
-
-    doc.close()
+    finally:
+        doc.close()
     return images
 
 
 def parse_range_str(range_str: str) -> List[int]:
-    range_lst = range_str.split(",")
-    page_lst = []
-    for i in range_lst:
-        if "-" in i:
-            start, end = i.split("-")
-            page_lst += list(range(int(start), int(end) + 1))
-        else:
-            page_lst.append(int(i))
-    page_lst = sorted(list(set(page_lst)))  # Deduplicate page numbers and sort in order
-    return page_lst
+    """Parse a page range like '0-5,7,9-12' into a sorted, de-duplicated list of
+    page indices. Raises ValueError with a clear message on malformed input."""
+    pages = set()
+    for part in range_str.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        try:
+            if "-" in part:
+                start_str, end_str = part.split("-")
+                start, end = int(start_str), int(end_str)
+                if start > end:
+                    raise ValueError
+                pages.update(range(start, end + 1))
+            else:
+                pages.add(int(part))
+        except ValueError:
+            raise ValueError(
+                f"Invalid page range segment {part!r} in {range_str!r}. "
+                "Use formats like '0-5', '7', or '0-5,7,9-12'."
+            ) from None
+    return sorted(pages)
 
 
-def load_file(filepath: str, config: dict):
+def load_file(filepath: str, config: dict) -> List[Image.Image]:
     page_range = config.get("page_range")
     if page_range:
         page_range = parse_range_str(page_range)

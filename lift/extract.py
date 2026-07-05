@@ -22,16 +22,18 @@ def resolve_schema(schema: dict | str) -> dict:
         try:
             resolved = json.loads(schema)
         except json.JSONDecodeError as e:
-            raise ValueError(f"Schema looks like inline JSON but failed to parse: {e}")
+            raise ValueError(
+                f"Schema looks like inline JSON but failed to parse: {e}"
+            ) from e
     else:
         try:
             resolved = load_schema(schema)
-        except (FileNotFoundError, ValueError):
+        except (FileNotFoundError, ValueError) as e:
             available = ", ".join(list_schemas()) or "(none)"
             raise ValueError(
                 f"Schema '{schema}' is not a file path, inline JSON, or saved schema name. "
                 f"Saved schemas: {available}"
-            )
+            ) from e
 
     error = validate_schema(resolved)
     if error:
