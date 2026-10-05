@@ -46,7 +46,7 @@ def save_output(output_dir: Path, file_name: str, result, num_pages: int):
     if result.extraction is not None:
         extraction_path = output_dir / f"{safe_name}.json"
         with open(extraction_path, "w", encoding="utf-8") as f:
-            json.dump(result.extraction, f, indent=2)
+            json.dump(result.extraction, f, indent=2, ensure_ascii=False)
         click.echo(f"  Saved: {extraction_path}")
 
     metadata = {
@@ -61,7 +61,7 @@ def save_output(output_dir: Path, file_name: str, result, num_pages: int):
 
     metadata_path = output_dir / f"{safe_name}_metadata.json"
     with open(metadata_path, "w", encoding="utf-8") as f:
-        json.dump(metadata, f, indent=2)
+        json.dump(metadata, f, indent=2, ensure_ascii=False)
 
 
 @click.command()
