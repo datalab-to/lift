@@ -7,6 +7,7 @@ import click
 from lift.extract import extract_images, resolve_schema
 from lift.input import load_file
 from lift.model import InferenceManager
+from lift.scripts.verification import verification_block
 
 
 def get_supported_files(input_path: Path) -> List[Path]:
@@ -39,7 +40,13 @@ def get_supported_files(input_path: Path) -> List[Path]:
         raise click.BadParameter(f"Path does not exist: {input_path}")
 
 
-def save_output(output_dir: Path, file_name: str, result, num_pages: int):
+def save_output(
+    output_dir: Path,
+    file_name: str,
+    result,
+    num_pages: int,
+    verification: dict | None = None,
+):
     """Save the extraction and metadata for one file to the output directory."""
     safe_name = Path(file_name).stem
 
@@ -55,6 +62,8 @@ def save_output(output_dir: Path, file_name: str, result, num_pages: int):
         "token_count": result.token_count,
         "error": result.error,
     }
+    if verification is not None:
+        metadata["document_verification"] = verification
     if result.extraction is None:
         # Keep the raw model output around so failures can be debugged
         metadata["raw"] = result.raw
@@ -91,6 +100,12 @@ def save_output(output_dir: Path, file_name: str, result, num_pages: int):
     default=None,
     help="Maximum number of output tokens.",
 )
+@click.option(
+    "--verify",
+    is_flag=True,
+    default=False,
+    help="Inspect each document's authenticity (risk band) and AI-text probability via Stipple (free tier, no signup) and record it in the file metadata.",
+)
 def main(
     input_path: Path,
     output_path: Path,
@@ -98,6 +113,7 @@ def main(
     method: str,
     page_range: str,
     max_output_tokens: int,
+    verify: bool,
 ):
     """Extract structured data matching a JSON schema from PDFs and images."""
     # Resolve the schema up front so bad input fails before the model loads
@@ -150,7 +166,19 @@ def main(
                     err=True,
                 )
 
-            save_output(output_path, file_path.name, result, num_pages=len(images))
+            verification = verification_block(file_path, enabled=verify)
+            if verify and verification is None:
+                click.echo("  Verification unavailable (offline or API error) - metadata saved without it.", err=True)
+            save_output(
+                output_path,
+                file_path.name,
+                result,
+                num_pages=len(images),
+                verification=verification,
+            )
+            if verification and verification.get("authenticity"):
+                band = verification["authenticity"].get("risk_band", "?")
+                click.echo(f"  Authenticity risk band: {band}")
             click.echo(f"  Completed: {file_path.name}")
 
         except Exception as e:
