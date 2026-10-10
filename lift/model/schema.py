@@ -21,7 +21,7 @@ class BatchInputItem:
 
 @dataclass
 class BatchOutputItem:
-    extraction: dict
+    extraction: dict | None
     token_count: int
     raw: str
     error: bool

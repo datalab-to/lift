@@ -1,6 +1,7 @@
-from dotenv import find_dotenv
-from pydantic_settings import BaseSettings
 import os
+
+from dotenv import find_dotenv
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -22,10 +23,9 @@ class Settings(BaseSettings):
     VLLM_MODEL_NAME: str = "lift"
     VLLM_GPUS: str = "0"
     MAX_VLLM_RETRIES: int = 6
+    VLLM_TIMEOUT: float = 600.0  # seconds; per-request timeout for the vLLM client
 
-    class Config:
-        env_file = find_dotenv("local.env")
-        extra = "ignore"
+    model_config = SettingsConfigDict(env_file=find_dotenv("local.env"), extra="ignore")
 
 
 settings = Settings()

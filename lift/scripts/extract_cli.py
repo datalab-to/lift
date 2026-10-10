@@ -29,11 +29,14 @@ def get_supported_files(input_path: Path) -> List[Path]:
             raise click.BadParameter(f"Unsupported file type: {input_path.suffix}")
 
     elif input_path.is_dir():
-        files = []
-        for ext in supported_extensions:
-            files.extend(input_path.glob(f"*{ext}"))
-            files.extend(input_path.glob(f"*{ext.upper()}"))
-        return sorted(files)
+        # Match extensions case-insensitively via suffix rather than globbing both
+        # cases — on case-insensitive filesystems (macOS) globbing *.pdf and *.PDF
+        # would return each file twice.
+        return sorted(
+            p
+            for p in input_path.iterdir()
+            if p.is_file() and p.suffix.lower() in supported_extensions
+        )
 
     else:
         raise click.BadParameter(f"Path does not exist: {input_path}")
@@ -104,7 +107,7 @@ def main(
     try:
         schema = resolve_schema(schema_arg)
     except ValueError as e:
-        raise click.BadParameter(str(e), param_hint="--schema")
+        raise click.BadParameter(str(e), param_hint="--schema") from e
 
     click.echo("lift CLI - Starting extraction")
     click.echo(f"Input: {input_path}")
