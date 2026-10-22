@@ -31,9 +31,11 @@ lift extracts structured JSON from PDFs and images by passing a schema. It's a 9
 
 Our managed platform runs improved extraction with higher accuracy than the open weights, plus per-field verification, citations, and confidence scores.
 
-If you have high volume workloads, we offer a batch processing service that has processed 1B+ pages per week.
+If you have high volume workloads, we offer a batch processing service that has processed 1B+ pages in a day at peak.
 
-Get started with **$20 in free credits per month** — [sign up](https://www.datalab.to/?utm_source=gh-lift) - takes under 30 seconds - or try lift in our [public playground](https://www.datalab.to/playground?utm_source=gh-lift).
+The Datalab API turns documents into verifiable knowledge your agents act on. Every result traces back to its page and position, and one API can parse, extract, fill and edit documents.
+
+Get started with **about 5,000 free convert pages every month** (work email) — [sign up](https://www.datalab.to/?utm_source=gh-lift) - takes under 30 seconds - or try lift in our [public playground](https://www.datalab.to/playground?utm_source=gh-lift).
 
 Commercial self-hosting requires a license — see [Commercial usage](#commercial-usage). For on-prem licensing, [contact us](https://www.datalab.to/contact?utm_source=gh-lift-onprem).
 
@@ -87,7 +89,7 @@ All models receive the same rendered page images, and extract each document in a
 - **Full-document accuracy** — fraction of documents where *every* field is correct.
 - All models served with default/recommended settings from Github or Huggingface.
 
-Hosted models with verification, citations, and confidence scores are available via the [Datalab API](https://www.datalab.to) - test in the [playground](https://www.datalab.to/playground).
+Hosted models with verification, citations, and confidence scores are available via the [Datalab API](https://www.datalab.to/?utm_source=gh-lift) - test in the [playground](https://www.datalab.to/playground?utm_source=gh-lift).
 
 ## Installation
 
